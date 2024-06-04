@@ -455,7 +455,7 @@ function App() {
 		<p>Swinburne has proposed a new enterprise bargaining agreement (EBA) with pay rises over the forthcoming three years.</p>
 		<p>This raises the question: how have our raises (since 2017) kept pace with inflation. <b>This application helps you answer that question.</b></p>
 		<p>Note that it <b>doesn’t</b> take into account promotions or increases in increment (merit pay rises). These reflect your improved skills, performance and experience, rather than Swinburne increasing your salary.</p>
-		<p>CPI is the Consumer Price Index, and is the Australian Bureau of Statistics’ inflation measure.</p>
+		<p>CPI is the Consumer Price Index, and is the Australian Bureau of Statistics’ inflation measure. Important note: the CPI is assumed to be flat (i.e. no inflation) after March 2024.</p>
 		<p className="attribution">Data: Australian Bureau of Statistics, Swinburne University of Technology,
 Academic &amp; General Staff Enterprise
 Agreement 2017, proposed Swinburne University of Technology -
