@@ -375,7 +375,7 @@ function getCpiForDate(theCpi: any, theDate: Date) {
 	return theCpi[theCpi.length-1][1];
 }
 
-function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: string}) {
+function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: string, showAll: boolean}) {
 
 	var rows: any = [];
 	var startDate = Date.parse(props.startDate);
@@ -431,7 +431,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 			</tr>
 		</thead>
 		<tbody>
-		{rows.map( (r: any) => <tr>
+		{rows.map( (r: any) => { if(props.showAll || r.comment.length) { return <tr>
 			<td>{r.date.toDateString()}</td>
 			<td>${r.pay.toFixed(2)}</td>
 			<td>{r.cpi}</td>
@@ -439,7 +439,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 			<td>${r.deflatedPay.toFixed(2)}</td>
 			<td>{r.payFrac.toFixed(4)}</td>
 			<td>{r.comment}</td>
-		</tr>)}
+		</tr>} else { return <></> } })}
 		</tbody>
 	</table>;
 }
@@ -448,6 +448,7 @@ function App() {
 	const [startDate, setStartDate] = useState("2020-01-01");
 	const [cpiSeries, setCpiSeries] = useState("melbourne");
 	const [paygrade, setPaygrade] = useState("index");
+	const [showAll, setShowAll] = useState(true);
 
 	return (<main>
 		<h1>Swinburne EBA calculator</h1>
@@ -473,11 +474,13 @@ Enterprise Agreement
 			<option value="hew7">HEW 7</option>
 			<option value="hew8">HEW 8</option>
 		</select></label>
+		<input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show every fortnight (not just pay bumps)
 		<h2>Table of values</h2>
 		<TableOfValues
 			startDate={startDate}
 			cpiSeries={cpiSeries}
 			paygrade={paygrade}
+			showAll={showAll}
 		/>
 	</main>
 	);
