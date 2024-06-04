@@ -19,6 +19,6 @@ table thead tr {
 	font-weight: bold;
 	border-bottom: 3px solid #dc2d27;
 }
-table tbody rd {
-	border-bottom: 1px solid #999999;
+table tbody td {
+	border: 1px solid #999999;
 }
