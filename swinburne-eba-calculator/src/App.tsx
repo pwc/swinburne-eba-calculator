@@ -397,7 +397,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 	return <table>
 		<thead>
 			<tr>
-				<th>Date</th>
+				<th>Fortnight</th>
 				<th>Nominal pay</th>
 				<th>CPI</th>
 				<th>Deflator</th>
@@ -425,7 +425,8 @@ function App() {
 
 	return (<main>
 		<h1>Swinburne EBA calculator</h1>
-		<p>This application tells you how you fare given Swinburne’s pay rises.</p>
+		<p>Swinburne has proposed a new enterprise bargaining agreement (EBA) with pay rises over the forthcoming three years.</p>
+		<p>This raises the question: how have our raises (since 2017) kept pace with inflation. <b>This application helps you answer that question.</b></p>
 		<p>Note that it <b>doesn’t</b> take into account promotions or increases in increment (merit pay rises). These reflect your improved skills, performance and experience, rather than Swinburne increasing your salary.</p>
 		<h2>Settings</h2>
 		<label>Start date: <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></label>
