@@ -30,6 +30,19 @@ function payWithRaises(paygrade: string, date: Date) {
 	return basePay;
 }
 
+function getComment(date: Date) {
+	if(date > new Date(Date.parse("2026-07-01"))) { return "2026 - Proposed 3.75% increase"; }
+	if(date > new Date(Date.parse("2025-07-01"))) { return "2025 - Proposed 4% increase"; }
+	if(date > new Date(Date.parse("2024-07-01"))) { return "2024 - Proposed 4% increase"; }
+	if(date > new Date(Date.parse("2023-08-22"))) { return "2023 - 3.5% outside EBA"; }
+	if(date > new Date(Date.parse("2022-03-01"))) { return "2022 - 2% outside EBA"; }
+	if(date > new Date(Date.parse("2021-03-01"))) { return "2021 - EBA 2%"; }
+	if(date > new Date(Date.parse("2020-03-01"))) { return "2020 - EBA 2%"; }
+	if(date > new Date(Date.parse("2019-03-01"))) { return "2019 - EBA 2%"; }
+	if(date > new Date(Date.parse("2018-03-01"))) { return "2018 - EBA 2% + $1200"; }
+	return "";
+}
+
 function getCpi(series: string) {
 	const cpiAustralia = [
 69.7  ,
@@ -374,6 +387,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 	var basePay = payWithRaises(props.paygrade, new Date(startDate));
 
 	var currentDate = startDate;
+	let lastComment = "";
 	while(currentDate < endDate) {
 		let theDate = new Date(currentDate);
 		let currentCpi = getCpiForDate(theCpi, theDate);
@@ -381,6 +395,14 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 		let thePay = payWithRaises(props.paygrade, theDate);
 		let deflatedPay = deflator * thePay;
 		let payFrac = deflatedPay / basePay;
+
+		let newComment = getComment(theDate);
+		if(newComment != lastComment) {
+			lastComment = newComment;
+		} else {
+			newComment = "";
+		}
+
 		rows.push( {
 			date: theDate,
 			pay: thePay,
@@ -388,9 +410,11 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 			deflator: deflator,
 			deflatedPay: deflatedPay,
 			payFrac: payFrac,
+			comment: newComment,
 		} );
 		currentDate += 14*86400*1000;
 	}
+	rows[0].comment = "Commencement";
 	//for(; currentDate += 14*86400*1000; currentDate < endDate) {
 	//}
 
@@ -403,6 +427,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 				<th>Deflator</th>
 				<th>Pay in reference dollars</th>
 				<th>Fraction of original pay</th>
+				<th>Note</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -413,6 +438,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 			<td>{r.deflator.toFixed(2)}</td>
 			<td>${r.deflatedPay.toFixed(2)}</td>
 			<td>{r.payFrac.toFixed(4)}</td>
+			<td>{r.comment}</td>
 		</tr>)}
 		</tbody>
 	</table>;
