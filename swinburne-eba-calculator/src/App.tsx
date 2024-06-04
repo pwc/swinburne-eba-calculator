@@ -437,15 +437,21 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 		<tbody>
 		{rows.map( (r: any) => { if(props.showAll || r.comment.length) { return <tr>
 			<td>{r.date.toDateString()}</td>
-			<td>${r.pay.toFixed(2)}</td>
-			<td>{r.cpi}</td>
+			<td>${formatPay(r.pay)}</td>
+			<td>{r.cpi.toFixed(1)}</td>
 			<td>{r.deflator.toFixed(2)}</td>
-			<td>${r.deflatedPay.toFixed(2)}</td>
+			<td>${formatPay(r.deflatedPay)}</td>
 			<td>{r.payFrac.toFixed(4)}</td>
 			<td>{r.comment}</td>
 		</tr>} else { return <></> } })}
 		</tbody>
 	</table>;
+}
+
+function formatPay(n: number) {
+	let thousands = Math.floor(n/1000).toFixed(0);
+	let hundreds = (n - (thousands as any as number) * 1000);
+	return ''+thousands+','+hundreds.toFixed(2);
 }
 
 function App() {
@@ -458,7 +464,7 @@ function App() {
 	return (<main>
 		<h1>Swinburne EBA calculator</h1>
 		<p>Swinburne has proposed a new enterprise bargaining agreement (EBA) with pay rises over the forthcoming three years.</p>
-		<p>This raises the question: how have our raises (since 2017) kept pace with inflation. <b>This application helps you answer that question.</b></p>
+		<p>This raises the question: how well have our raises (since 2017) kept pace with inflation? <b>This application helps you answer that question.</b></p>
 		<p>Note that it <b>doesn’t</b> take into account promotions or increases in increment (merit pay rises). These reflect your improved skills, performance and experience, rather than Swinburne increasing your salary.</p>
 		<p>CPI is the Consumer Price Index, and is the Australian Bureau of Statistics’ inflation measure. Important note: the CPI is assumed to be flat (i.e. no inflation) after March 2024.</p>
 		<p className="attribution">Data: Australian Bureau of Statistics, Swinburne University of Technology,
@@ -475,9 +481,8 @@ Enterprise Agreement
 			<option value="brisbane">Brisbane</option>
 		</select></label>
 		<label>Pay grade: <select value={paygrade} onChange={(e) => setPaygrade(e.target.value)}>
-			<option value="index">Index ($100)</option>
-			<option value="hew7">HEW 7</option>
-			<option value="hew8">HEW 8</option>
+			<option value="hew7">HEW 7.1</option>
+			<option value="hew8">HEW 8.1</option>
 		</select></label>
 		<label>Inflation rate: <input type="text" value={100*inflationRate} onChange={(e) => setInflationRate((e.target.value as any as number)/100)} />% (after June 2024)</label>
 		<input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show every fortnight (not just pay bumps)
