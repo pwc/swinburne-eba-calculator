@@ -462,7 +462,7 @@ function formatPay(n: number) {
 function App() {
 	const [startDate, setStartDate] = useState("2020-01-01");
 	const [cpiSeries, setCpiSeries] = useState("melbourne");
-	const [paygrade, setPaygrade] = useState("index");
+	const [paygrade, setPaygrade] = useState("hew7");
 	const [showAll, setShowAll] = useState(true);
 	const [inflationRate, setInflationRate] = useState(0.03);
 
