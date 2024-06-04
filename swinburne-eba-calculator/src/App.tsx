@@ -362,7 +362,7 @@ function decorateDates(cpi: any) {
 	});
 }
 
-function getCpiForDate(theCpi: any, theDate: Date) {
+function getCpiForDate(theCpi: any, theDate: Date, inflationRate: number) {
 	//alert(theCpi.length);
 	//alert(theCpi[theCpi.length-1][0]);
 	//alert(theDate);
@@ -372,10 +372,14 @@ function getCpiForDate(theCpi: any, theDate: Date) {
 		}
 	}
 	// ASSUMED INFLATION
-	return theCpi[theCpi.length-1][1];
+
+	let yearsAfterEnd = (theDate.valueOf() - theCpi[theCpi.length-1][0].valueOf()) / ( 365*86400*1000 );
+	let cpiFactor = theCpi[theCpi.length-1][1]*( (1+inflationRate) ** yearsAfterEnd);
+
+	return cpiFactor;
 }
 
-function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: string, showAll: boolean}) {
+function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: string, showAll: boolean, inflationRate: number}) {
 
 	var rows: any = [];
 	var startDate = Date.parse(props.startDate);
@@ -383,14 +387,14 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 
 	var theCpi = getCpi(props.cpiSeries);
 	//alert(theCpi.length);
-	var baseCpi = getCpiForDate(theCpi, new Date(startDate));
+	var baseCpi = getCpiForDate(theCpi, new Date(startDate), props.inflationRate);
 	var basePay = payWithRaises(props.paygrade, new Date(startDate));
 
 	var currentDate = startDate;
 	let lastComment = "";
 	while(currentDate < endDate) {
 		let theDate = new Date(currentDate);
-		let currentCpi = getCpiForDate(theCpi, theDate);
+		let currentCpi = getCpiForDate(theCpi, theDate, props.inflationRate);
 		let deflator = baseCpi / currentCpi;
 		let thePay = payWithRaises(props.paygrade, theDate);
 		let deflatedPay = deflator * thePay;
@@ -449,6 +453,7 @@ function App() {
 	const [cpiSeries, setCpiSeries] = useState("melbourne");
 	const [paygrade, setPaygrade] = useState("index");
 	const [showAll, setShowAll] = useState(true);
+	const [inflationRate, setInflationRate] = useState(0.03);
 
 	return (<main>
 		<h1>Swinburne EBA calculator</h1>
@@ -474,6 +479,7 @@ Enterprise Agreement
 			<option value="hew7">HEW 7</option>
 			<option value="hew8">HEW 8</option>
 		</select></label>
+		<label>Inflation rate: <input type="text" value={100*inflationRate} onChange={(e) => setInflationRate((e.target.value as any as number)/100)} />% (after June 2024)</label>
 		<input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show every fortnight (not just pay bumps)
 		<h2>Table of values</h2>
 		<TableOfValues
@@ -481,6 +487,7 @@ Enterprise Agreement
 			cpiSeries={cpiSeries}
 			paygrade={paygrade}
 			showAll={showAll}
+			inflationRate={inflationRate}
 		/>
 	</main>
 	);
