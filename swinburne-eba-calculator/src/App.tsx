@@ -436,16 +436,21 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 		</thead>
 		<tbody>
 		{rows.map( (r: any) => { if(props.showAll || r.comment.length) { return <tr>
-			<td>{r.date.toDateString()}</td>
+			<td>{formatDate(r.date)}</td>
 			<td>${formatPay(r.pay)}</td>
 			<td>{r.cpi.toFixed(1)}</td>
 			<td>{r.deflator.toFixed(2)}</td>
 			<td>${formatPay(r.deflatedPay)}</td>
-			<td>{r.payFrac.toFixed(4)}</td>
+			<td>{r.payFrac.toFixed(2)}</td>
 			<td>{r.comment}</td>
 		</tr>} else { return <></> } })}
 		</tbody>
 	</table>;
+}
+
+function formatDate(n: Date) {
+	const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	return '' + n.getDay() + ' ' + month[n.getMonth()] + ' ' + n.getFullYear();
 }
 
 function formatPay(n: number) {
