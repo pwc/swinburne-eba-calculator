@@ -7,11 +7,25 @@ import './App.css';
 
 function payWithRaises(paygrade: string, date: Date) {
 	var basePay = 100;
-	if(paygrade == "hew7") {
-		basePay = 82585;
-	} else if(paygrade == "hew8") {
-		basePay = 92838;
-	}
+	const basepayLookup: Map<String, Number> = new Map([
+		['hew1', 46979],
+		['hew2', 50201],
+		['hew3', 52502],
+		['hew4', 59520],
+		['hew5', 64646],
+		['hew6', 74894],
+		['hew7', 82585],
+		['hew8', 92838],
+		['hew9', 108214],
+		['hew10', 115902],
+		['acaA', 64501],
+		['acaB', 91849],
+		['acaC', 112383],
+		['acaD', 135204],
+		['acaE', 173994],
+	]);
+
+	basePay = basepayLookup.get(paygrade) as number;
 
 	if(date > new Date(Date.parse("2018-03-01"))) {
 		basePay *= 1.02;
@@ -485,8 +499,21 @@ Enterprise Agreement
 			<option value="brisbane">Brisbane</option>
 		</select></label>
 		<label>Pay grade: <select value={paygrade} onChange={(e) => setPaygrade(e.target.value)}>
+			<option value="hew1">HEW 1.1</option>
+			<option value="hew2">HEW 2.1</option>
+			<option value="hew3">HEW 3.1</option>
+			<option value="hew4">HEW 4.1</option>
+			<option value="hew5">HEW 5.1</option>
+			<option value="hew6">HEW 6.1</option>
 			<option value="hew7">HEW 7.1</option>
 			<option value="hew8">HEW 8.1</option>
+			<option value="hew9">HEW 9.1</option>
+			<option value="hew10">HEW 10.1</option>
+			<option value="acaA">Level A academic</option>
+			<option value="acaB">Level B academic</option>
+			<option value="acaC">Level C academic</option>
+			<option value="acaD">Level D academic</option>
+			<option value="acaE">Level E academic</option>
 		</select></label>
 		<label>Inflation rate: <input type="text" value={100*inflationRate} onChange={(e) => setInflationRate((e.target.value as any as number)/100)} />% (after June 2024)</label>
 		<input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show every fortnight (not just pay bumps)
