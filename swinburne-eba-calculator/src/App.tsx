@@ -437,10 +437,10 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 		<tbody>
 		{rows.map( (r: any) => { if(props.showAll || r.comment.length) { return <tr>
 			<td>{formatDate(r.date)}</td>
-			<td>${formatPay(r.pay)}</td>
+			<td>{formatPay(r.pay)}</td>
 			<td>{r.cpi.toFixed(1)}</td>
 			<td>{r.deflator.toFixed(2)}</td>
-			<td>${formatPay(r.deflatedPay)}</td>
+			<td>{formatPay(r.deflatedPay)}</td>
 			<td>{r.payFrac.toFixed(2)}</td>
 			<td>{r.comment}</td>
 		</tr>} else { return <></> } })}
@@ -454,9 +454,7 @@ function formatDate(n: Date) {
 }
 
 function formatPay(n: number) {
-	let thousands = Math.floor(n/1000).toFixed(0);
-	let hundreds = (n - (thousands as any as number) * 1000);
-	return ''+thousands+','+hundreds.toFixed(2);
+	return(new Intl.NumberFormat('au-EN', { 'style': 'currency', currency: 'AUD' }).format(n));
 }
 
 function App() {
