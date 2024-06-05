@@ -450,7 +450,7 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 
 function formatDate(n: Date) {
 	const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-	return '' + n.getDay() + ' ' + month[n.getMonth()] + ' ' + n.getFullYear();
+	return '' + n.getDate() + ' ' + month[n.getMonth()] + ' ' + n.getFullYear();
 }
 
 function formatPay(n: number) {
