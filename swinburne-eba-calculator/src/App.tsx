@@ -395,44 +395,8 @@ function getCpiForDate(theCpi: any, theDate: Date, inflationRate: number) {
 
 function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: string, showAll: boolean, inflationRate: number}) {
 
-	var rows: any = [];
-	var startDate = Date.parse(props.startDate);
-	var endDate = Date.parse("2026-12-31");
+	let rows = generateAllTheRows(props.cpiSeries, props.inflationRate, props.paygrade, props.startDate);
 
-	var theCpi = getCpi(props.cpiSeries);
-	//alert(theCpi.length);
-	var baseCpi = getCpiForDate(theCpi, new Date(startDate), props.inflationRate);
-	var basePay = payWithRaises(props.paygrade, new Date(startDate));
-
-	var currentDate = startDate;
-	let lastComment = "";
-	while(currentDate < endDate) {
-		let theDate = new Date(currentDate);
-		let currentCpi = getCpiForDate(theCpi, theDate, props.inflationRate);
-		let deflator = baseCpi / currentCpi;
-		let thePay = payWithRaises(props.paygrade, theDate);
-		let deflatedPay = deflator * thePay;
-		let payFrac = deflatedPay / basePay;
-
-		let newComment = getComment(theDate);
-		if(newComment != lastComment) {
-			lastComment = newComment;
-		} else {
-			newComment = "";
-		}
-
-		rows.push( {
-			date: theDate,
-			pay: thePay,
-			cpi: currentCpi,
-			deflator: deflator,
-			deflatedPay: deflatedPay,
-			payFrac: payFrac,
-			comment: newComment,
-		} );
-		currentDate += 14*86400*1000;
-	}
-	rows[0].comment = "Commencement";
 	//for(; currentDate += 14*86400*1000; currentDate < endDate) {
 	//}
 
@@ -460,6 +424,47 @@ function TableOfValues(props: {startDate: string, cpiSeries: string, paygrade: s
 		</tr>} else { return <></> } })}
 		</tbody>
 	</table>;
+}
+
+function generateAllTheRows(cpiSeries: string, inflationRate: number, paygrade: string, strStartDate: string) {
+	let startDate = Date.parse(strStartDate);
+	let endDate = Date.parse("2026-12-31");
+
+	let rows: any = [];
+	let theCpi = getCpi(cpiSeries);
+	let baseCpi = getCpiForDate(theCpi, new Date(startDate), inflationRate);
+	let basePay = payWithRaises(paygrade, new Date(startDate));
+
+	let currentDate = startDate;
+	let lastComment = "";
+	while(currentDate < endDate) {
+		let theDate = new Date(currentDate);
+		let currentCpi = getCpiForDate(theCpi, theDate, inflationRate);
+		let deflator = baseCpi / currentCpi;
+		let thePay = payWithRaises(paygrade, theDate);
+		let deflatedPay = deflator * thePay;
+		let payFrac = deflatedPay / basePay;
+
+		let newComment = getComment(theDate);
+		if(newComment != lastComment) {
+			lastComment = newComment;
+		} else {
+			newComment = "";
+		}
+
+		rows.push( {
+			date: theDate,
+			pay: thePay,
+			cpi: currentCpi,
+			deflator: deflator,
+			deflatedPay: deflatedPay,
+			payFrac: payFrac,
+			comment: newComment,
+		} );
+		currentDate += 14*86400*1000;
+	}
+	rows[0].comment = "Commencement";
+	return rows;
 }
 
 function formatDate(n: Date) {
