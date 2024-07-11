@@ -484,18 +484,12 @@ function App() {
 	const [inflationRate, setInflationRate] = useState(0.03);
 
 	return (<main>
-		<h1>Swinburne EBA calculator</h1>
-		<p>Swinburne has proposed a new enterprise bargaining agreement (EBA) with pay rises over the forthcoming three years.</p>
-		<p>This raises the question: how well have our raises (since 2017) kept pace with inflation? <b>This application helps you answer that question.</b></p>
-		<p>Note that it <b>doesn’t</b> take into account promotions or increases in increment (merit pay rises). These reflect your improved skills, performance and experience, rather than Swinburne increasing your salary.</p>
+		<h1>EBA calculator</h1>
+		<p>Consider a new enterprise bargaining agreement (EBA) with pay rises over the forthcoming three years.</p>
+		<p>This raises the question: how well does it keep pace with inflation? <b>This application helps you answer that question.</b></p>
+		<p>Note that it <b>doesn’t</b> take into account promotions or increases in increment (merit pay rises). These reflect your improved skills, performance and experience, rather than the employer increasing your salary.</p>
 		<p>CPI is the Consumer Price Index, and is the Australian Bureau of Statistics’ inflation measure. Important note: the CPI is assumed to be constant at the specified rate, after March 2024.</p>
-		<p>Note — this website wasn’t made or endorsed by Swinburne or the NTEU. Sceptically read the numbers it produces.</p>
-		<p className="attribution">Data: Australian Bureau of Statistics, Swinburne University of Technology,
-Academic &amp; General Staff Enterprise
-Agreement 2017, proposed Swinburne University of Technology -
-Academic and Professional Employees
-Enterprise Agreement
-2024</p>
+		<p className="attribution">Data: Australian Bureau of Statistics.</p>
 		<h2>Settings</h2>
 		<label>Start date: <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></label>
 		<label>CPI group: <select value={cpiSeries} onChange={(e) => setCpiSeries(e.target.value)}>
